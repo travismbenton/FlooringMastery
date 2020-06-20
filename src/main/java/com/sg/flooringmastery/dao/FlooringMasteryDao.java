@@ -14,16 +14,16 @@ import java.util.List;
  */
 public interface FlooringMasteryDao {
     
-    Orders getOrder(String orderNumber)
-            throws FlooringMasteryPersistenceExpection;
-    
-    Orders addOrder(String orderNumber, Orders order)
+    Orders addOrder(int orderNumber, Orders order)
             throws FlooringMasteryPersistenceExpection;
     
     List<Orders> getAllOrders()
-            throws FlooringMasteryPersistenceExpection;    
+            throws FlooringMasteryPersistenceExpection; 
     
-    Orders removeOrder(String orderNumber)
+    Orders getOrder(int orderNumber)
+            throws FlooringMasteryPersistenceExpection;       
+    
+    Orders removeOrder(int orderNumber)
             throws FlooringMasteryPersistenceExpection;
     
     

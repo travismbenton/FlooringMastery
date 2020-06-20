@@ -10,7 +10,6 @@ import com.sg.flooringmastery.dto.ProductLaborCost;
 import com.sg.flooringmastery.dto.ProductPrice;
 import com.sg.flooringmastery.dto.TaxRates;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.List;
 
@@ -20,10 +19,20 @@ import java.util.List;
  */
 public class FlooringMasteryView {
     
-    private UserIO io = new UserIOConsoleImpl();
-    TaxRates taxRate = new TaxRates();
-    ProductPrice productPrice = new ProductPrice();
-    ProductLaborCost productLaborCost = new ProductLaborCost();
+    private UserIO io; 
+    TaxRates taxRate;
+    ProductPrice productPrice;
+    ProductLaborCost productLaborCost; 
+    
+    // -- CONSTRUCTOR -- 
+    public FlooringMasteryView (UserIO io, TaxRates taxRate, 
+            ProductPrice productPrice, ProductLaborCost productLaborCost){
+        this.io = io;
+        this.taxRate = taxRate;
+        this.productPrice = productPrice;
+        this.productLaborCost = productLaborCost;        
+    }
+    // -- "END" CONSTRUCTOR -- 
     
     public int printMenuGetUserSelection(){
         
@@ -62,7 +71,7 @@ public class FlooringMasteryView {
     
     // ---------------------------------------------| 
  
-    // -- LIST ORDERS  SECTION --         
+    // -- DISPLAY ORDERS  SECTION --         
     public void displayOrdersListBanner() {
 	io.print("=== Customer's Orders ===");
     }   
@@ -79,7 +88,7 @@ public class FlooringMasteryView {
               
         }      
     }
-    // -- "END" LIST ORDERs  SECTION --
+    // -- "END" DISPLAY ORDERS  SECTION --
     
     //---------------------------------------------------------|      
         
@@ -88,13 +97,14 @@ public class FlooringMasteryView {
 	io.print("=== Create New Order ===");        
     }
     public Orders getNewOrderInfo(){
-        String orderNumber = io.readString("Enter Order Number. ");
+        
+        int orderNumber = io.readInt("Enter Order Number. ");
         String customerName = io.readString("Enter Customer Name. ");
         String state = io.readString("Enter Customer State. ");
         String productType = io.readString("Enter Product Type. ");
         double area = io.readDouble("Enter Projected Area. ");
-        
-        Orders currentOrder = new Orders(orderNumber);
+        // -- Create a new "Order" object --
+        Orders currentOrder = new Orders(orderNumber);// -- OrderNumber of the "New Order"
         currentOrder.setCustomerName(customerName);
         currentOrder.setState(state);
         // -- TAXE RATES --
@@ -115,6 +125,7 @@ public class FlooringMasteryView {
                 break;
         }        
         currentOrder.setProductType(productType);
+        
         currentOrder.setArea(area);
         // -- COST PER SQUARE FOOT --
         switch (productType.toLowerCase()){
@@ -220,28 +231,70 @@ public class FlooringMasteryView {
         decimalTotal = decimalMaterialCost.add(decimalLaborCost).add(decimalTax).setScale(2, RoundingMode.HALF_UP);
         
         // -- Big Decimal  Conversion back to Double --
-        materialCost = decimalMaterialCost.doubleValue();
+        materialCost = decimalMaterialCost.doubleValue();        
         currentOrder.setMaterialCost(materialCost);
         laborCost = decimalLaborCost.doubleValue();
         currentOrder.setLaborCost(laborCost);        
         tax = decimalTax.doubleValue();
         currentOrder.setTax(tax);
         total = decimalTotal.doubleValue();        
-        currentOrder.setTotal(total);        
-        
-        return currentOrder;
+        currentOrder.setTotal(total);       
+                        
+       
+        return currentOrder;         
+               
     }    
+    
+    public Orders displayOrderSummary(Orders newOrder){
+        
+        boolean submit = true;
+        do {
+            io.print("  ===  Order Summary  ===  ");
+            io.print("");
+            io.print("Order Number: "+newOrder.getOrderNumber());
+	    io.print("Customer Name: "+newOrder.getCustomerName());
+	    io.print("Customer State: "+newOrder.getState());
+            io.print("Tax Rate: $"+newOrder.getTaxRate());
+	    io.print("Product Type: "+newOrder.getProductType());
+            io.print("Projected Area: "+newOrder.getArea());            
+	    io.print("Product Cost Per Square Foot: $"+newOrder.getCostPerSquareFoot());
+	    io.print("Labor Cost Per Square Foot: $"+newOrder.getLaborCostPerSquareFoot());
+	    io.print("Material Cost: $"+newOrder.getMaterialCost());
+            io.print("Labor Cost: $"+newOrder.getLaborCost());
+            io.print("Tax: $"+newOrder.getTax());
+            io.print("Total: $"+newOrder.getTotal());    
+            io.print("");
+            io.print("  ===  END:  Order Summary  ===  ");        
+        
+        String submitOrder = io.readString("Would you like to submit this order \"Y/N\" ").toUpperCase();
+        if (submitOrder.equals("Y") || submitOrder.equals("YES")){
+            submit = false;
+            break;           
+            
+        }
+        
+        }while(submit);
+        
+        return null;
+   }
+    
     public void displayCreateOrderSuccessBanner(){
         io.readString("New Order successfully "
-                + "Created.  Please hit enter to continue");
+                + "Created.  Please hit enter to continue. ");
     }
              
     // -- "END" ADD ORDER  SECTION --
     
     //---------------------------------------------------------|    
         
-    // -- EDIT ORDER  SECTION --    
-    
+    // -- EDIT ORDER  SECTION -- 
+    public void displayEditOrderBanner() {
+	io.print("=== Edit Order ===");
+    } 
+    public void displayEditOrderSuccessBanner(){
+        io.readString("Edit successful. "
+                + "Please hit enter to continue. ");
+    }    
     // -- "END" EDIT ORDER  SECTION --
     
     //---------------------------------------------------------|
@@ -250,8 +303,8 @@ public class FlooringMasteryView {
     public void displayRemoveOrderBanner() {
 	io.print("=== Remove Order ===");
     } 
-     public String getOrderNumberChoice(){
-        return io.readString("Please enter Order Number.");
+     public int getOrderNumberChoice(){
+        return io.readInt("Please enter Order Number.");
     }
     public void displayRemoveOrderSuccessfulBanner() {
 	io.readString("Order successfully removed. "

@@ -13,125 +13,119 @@ import java.util.Objects;
  */
 public class Orders {
     
-    private String orderNumber;
-    private String CustomerName;
-    private String State;
-    private double TaxRate;
-    private String ProductType;
-    private double Area;
-    private double CostPerSquareFoot;
-    private double LaborCostPerSquareFoot;
-    private double MaterialCost;
-    private double LaborCost;
-    private double Tax;
-    private double Total;
+    private int orderNumber;
+    private String customerName;
+    private String state;
+    private double taxRate;
+    private String productType;
+    private double area;
+    private double costPerSquareFoot;
+    private double laborCostPerSquareFoot;
+    private double materialCost;
+    private double laborCost;
+    private double tax;
+    private double total;
     
     
-    public Orders (String orderNumber) {
+    public Orders(int orderNumber) {        
         this.orderNumber = orderNumber;
     }
 
-    public String getOrderNumber() {
+    public int getOrderNumber() {
         return orderNumber;
-    }    
-
-    public String getCustomerName() {
-        return CustomerName;
     }
 
-    public void setCustomerName(String CustomerName) {
-        this.CustomerName = CustomerName;
+   /* public void setOrderNumber(int orderNumber) {
+        this.orderNumber = orderNumber;
+    }*/
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
     public String getState() {
-        return State;
+        return state;
     }
 
-    public void setState(String State) {
-        this.State = State;
+    public void setState(String state) {
+        this.state = state;
     }
 
     public double getTaxRate() {
-        return TaxRate;
+        return taxRate;
     }
 
-    public void setTaxRate(double TaxRate) {
-        this.TaxRate = TaxRate;
+    public void setTaxRate(double taxRate) {
+        this.taxRate = taxRate;
     }
 
     public String getProductType() {
-        return ProductType;
+        return productType;
     }
 
-    public void setProductType(String ProductType) {
-        this.ProductType = ProductType;
+    public void setProductType(String productType) {
+        this.productType = productType;
     }
 
     public double getArea() {
-        return Area;
+        return area;
     }
 
-    public void setArea(double Area) {
-        this.Area = Area;
+    public void setArea(double area) {
+        this.area = area;
     }
 
     public double getCostPerSquareFoot() {
-        return CostPerSquareFoot;
+        return costPerSquareFoot;
     }
 
-    public void setCostPerSquareFoot(double CostPerSquareFoot) {
-        this.CostPerSquareFoot = CostPerSquareFoot;
+    public void setCostPerSquareFoot(double costPerSquareFoot) {
+        this.costPerSquareFoot = costPerSquareFoot;
     }
 
     public double getLaborCostPerSquareFoot() {
-        return LaborCostPerSquareFoot;
+        return laborCostPerSquareFoot;
     }
 
-    public void setLaborCostPerSquareFoot(double LaborCostPerSquareFoot) {
-        this.LaborCostPerSquareFoot = LaborCostPerSquareFoot;
+    public void setLaborCostPerSquareFoot(double laborCostPerSquareFoot) {
+        this.laborCostPerSquareFoot = laborCostPerSquareFoot;
     }
 
     public double getMaterialCost() {
-        return MaterialCost;
+        return materialCost;
     }
 
-    public void setMaterialCost(double MaterialCost) {
-        this.MaterialCost = MaterialCost;
+    public void setMaterialCost(double materialCost) {
+        this.materialCost = materialCost;
     }
 
     public double getLaborCost() {
-        return LaborCost;
+        return laborCost;
     }
 
-    public void setLaborCost(double LaborCost) {
-        this.LaborCost = LaborCost;
+    public void setLaborCost(double laborCost) {
+        this.laborCost = laborCost;
     }
 
     public double getTax() {
-        return Tax;
+        return tax;
     }
 
-    public void setTax(double Tax) {
-        this.Tax = Tax;
+    public void setTax(double tax) {
+        this.tax = tax;
     }
 
     public double getTotal() {
-        return Total;
+        return total;
     }
 
-    public void setTotal(double Total) {
-        this.Total = Total;
+    public void setTotal(double total) {
+        this.total = total;
     }
-    
-    
 
-   
-    
-    
-    
-    
-    
-    
-    
     
 }

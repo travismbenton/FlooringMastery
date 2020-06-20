@@ -6,36 +6,39 @@
 package com.sg.flooringmastery.controller;
 
 import com.sg.flooringmastery.dao.FlooringMasteryDao;
-import com.sg.flooringmastery.dao.FlooringMasteryDaoFileImpl;
 import com.sg.flooringmastery.dao.FlooringMasteryPersistenceExpection;
 import com.sg.flooringmastery.dto.Orders;
 import com.sg.flooringmastery.ui.FlooringMasteryView;
-import com.sg.flooringmastery.ui.UserIO;
-import com.sg.flooringmastery.ui.UserIOConsoleImpl;
 import java.util.List;
 
 /**
  *
  * @author travi
  */
-public class FlooringMasteryController {
+public class FlooringMasteryController {    
+     
+    FlooringMasteryDao dao; 
+    FlooringMasteryView view; 
     
-    private UserIO io = new UserIOConsoleImpl();
-    FlooringMasteryDao dao = new FlooringMasteryDaoFileImpl();
-    FlooringMasteryView view = new FlooringMasteryView();
+    // --  CONSTRUCTOR -- 
+    public FlooringMasteryController (FlooringMasteryDao dao, FlooringMasteryView view) {
+        this.dao = dao;
+        this.view = view;        
+    }
+    // -- "END" CONSTRUCTOR -- 
     
     public void run() throws FlooringMasteryPersistenceExpection{
         
         int menuSelection = 0;
         boolean keepGoing = true;
-        //try {
+        try {
         while (keepGoing){            
             
             menuSelection = getMenuSelection();
             
             switch (menuSelection){
                 case 1:
-                    listOrders();
+                    displayOrders();
                     break;
                 case 2:
                     addOrder();
@@ -64,12 +67,12 @@ public class FlooringMasteryController {
             
         } // -- "END" WHILE LOOP --
         exitMessage();
-        /*
-        } catch (SetUpDaoException e){
+        
+        } catch (FlooringMasteryPersistenceExpection | NumberFormatException e){
             run();
             //view.displayErrorMessage(e.getMessage());
         }        
-        */           
+                   
             
     } // -- "END" RUN --
         
@@ -93,23 +96,24 @@ public class FlooringMasteryController {
     
     // ---------------------------------------------|  
     
-    // -- LIST ORDERS  SECTION --    
-    private void listOrders() throws FlooringMasteryPersistenceExpection {
+    // -- DISPLAY ORDERS  SECTION --    
+    private void displayOrders() throws FlooringMasteryPersistenceExpection {
         view.displayOrdersListBanner();
         String newDate = view.getOrderDateChoice();
         List<Orders> orderList = dao.getAllOrders();
        // view.displayOrderList(orderList);
     }           
-    // -- "END" LIST ORDERS  SECTION --
+    // -- "END" DISPLAY ORDERS  SECTION --
     
     //---------------------------------------------------------|      
         
     // -- ADD ORDER  SECTION --    
     private void addOrder() throws FlooringMasteryPersistenceExpection {
         view.displayCreateOrderBanner();
-        Orders newOrder = view.getNewOrderInfo();
+        Orders newOrder = view.getNewOrderInfo();                
+        //view.displayOrderSummary(newOrder);        
         dao.addOrder(newOrder.getOrderNumber(), newOrder);
-        view.displayCreateOrderSuccessBanner();
+        view.displayCreateOrderSuccessBanner();                 
     }         
     // -- "END" ADD ORDER  SECTION --
     
@@ -117,7 +121,10 @@ public class FlooringMasteryController {
         
     // -- EDIT ORDER  SECTION --    
     private void editOrder() throws FlooringMasteryPersistenceExpection {
-        
+        view.displayEditOrderBanner();
+        Orders newOrder = view.getNewOrderInfo(); 
+        dao.addOrder(newOrder.getOrderNumber(), newOrder);
+        view.displayEditOrderSuccessBanner();
     }
     // -- "END" EDIT ORDER  SECTION --
     
@@ -126,8 +133,8 @@ public class FlooringMasteryController {
     // -- REMOVE ORDER  SECTION --    
     private void removeOrder() throws FlooringMasteryPersistenceExpection {
         view.displayRemoveOrderBanner();
-        String existingOrderNumber = view.getOrderNumberChoice();
-        String orderDate = view.getOrderDateChoice();        
+        int existingOrderNumber = view.getOrderNumberChoice();
+        //String orderDate = view.getOrderDateChoice();        
         dao.removeOrder(existingOrderNumber);
         view.displayRemoveOrderSuccessfulBanner();
     }        

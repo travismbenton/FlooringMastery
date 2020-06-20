@@ -72,7 +72,7 @@ public class UserIOConsoleImpl implements UserIO {
         String input = sc.nextLine();
         //-- Conversion from "String to Integer" --
         int num = Integer.parseInt(input);
-        System.out.println(num);        
+        //System.out.println(num);        
         return num;        
     }
 
