@@ -13,32 +13,31 @@ import java.util.Objects;
  */
 public class Orders {
     
-    private int orderNumber;
+    private String orderNumber;
     private String customerName;
     private String state;
-    private double taxRate;
+    private String taxRate;
     private String productType;
-    private double area;
-    private double costPerSquareFoot;
-    private double laborCostPerSquareFoot;
-    private double materialCost;
-    private double laborCost;
-    private double tax;
-    private double total;
+    private String area;
+    private String costPerSquareFoot;
+    private String laborCostPerSquareFoot;
+    private String materialCost;
+    private String laborCost;
+    private String tax;
+    private String total;
     
-    
-    public Orders(int orderNumber) {        
+    public Orders(String orderNumber) {
         this.orderNumber = orderNumber;
     }
 
-    public int getOrderNumber() {
+    public String getOrderNumber() {
         return orderNumber;
     }
-
-   /* public void setOrderNumber(int orderNumber) {
+/*
+    public void setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber;
-    }*/
-
+    }
+*/
     public String getCustomerName() {
         return customerName;
     }
@@ -55,11 +54,11 @@ public class Orders {
         this.state = state;
     }
 
-    public double getTaxRate() {
+    public String getTaxRate() {
         return taxRate;
     }
 
-    public void setTaxRate(double taxRate) {
+    public void setTaxRate(String taxRate) {
         this.taxRate = taxRate;
     }
 
@@ -71,61 +70,63 @@ public class Orders {
         this.productType = productType;
     }
 
-    public double getArea() {
+    public String getArea() {
         return area;
     }
 
-    public void setArea(double area) {
+    public void setArea(String area) {
         this.area = area;
     }
 
-    public double getCostPerSquareFoot() {
+    public String getCostPerSquareFoot() {
         return costPerSquareFoot;
     }
 
-    public void setCostPerSquareFoot(double costPerSquareFoot) {
+    public void setCostPerSquareFoot(String costPerSquareFoot) {
         this.costPerSquareFoot = costPerSquareFoot;
     }
 
-    public double getLaborCostPerSquareFoot() {
+    public String getLaborCostPerSquareFoot() {
         return laborCostPerSquareFoot;
     }
 
-    public void setLaborCostPerSquareFoot(double laborCostPerSquareFoot) {
+    public void setLaborCostPerSquareFoot(String laborCostPerSquareFoot) {
         this.laborCostPerSquareFoot = laborCostPerSquareFoot;
     }
 
-    public double getMaterialCost() {
+    public String getMaterialCost() {
         return materialCost;
     }
 
-    public void setMaterialCost(double materialCost) {
+    public void setMaterialCost(String materialCost) {
         this.materialCost = materialCost;
     }
 
-    public double getLaborCost() {
+    public String getLaborCost() {
         return laborCost;
     }
 
-    public void setLaborCost(double laborCost) {
+    public void setLaborCost(String laborCost) {
         this.laborCost = laborCost;
     }
 
-    public double getTax() {
+    public String getTax() {
         return tax;
     }
 
-    public void setTax(double tax) {
+    public void setTax(String tax) {
         this.tax = tax;
     }
 
-    public double getTotal() {
+    public String getTotal() {
         return total;
     }
 
-    public void setTotal(double total) {
+    public void setTotal(String total) {
         this.total = total;
     }
+
+    
 
     
 }

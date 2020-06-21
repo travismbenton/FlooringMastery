@@ -3,19 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.sg.flooringmastery.dao;
+package com.sg.flooringmastery.service;
 
 /**
  *
  * @author travi
  */
-public class FlooringMasteryPersistenceExpection extends Exception {
+public class FlooringMasteryDataValidationException extends Exception{
     
-    public FlooringMasteryPersistenceExpection(String message){
+    public FlooringMasteryDataValidationException(String message){
         super(message);
     }
     
-    public FlooringMasteryPersistenceExpection(String message, Throwable cause){
+    public FlooringMasteryDataValidationException(String message, Throwable cause){
         super(message, cause);
     }
 }

@@ -11,40 +11,40 @@ package com.sg.flooringmastery.dto;
  */
 public class ProductLaborCost {
     
-    private double carpet = 2.10;
-    private double laminate = 2.10;
-    private double tile = 4.15;
-    private double wood = 4.75;
+    private String carpet = "2.10";
+    private String laminate = "2.10";
+    private String tile = "4.15";
+    private String wood = "4.75";
 
-    public double getCarpet() {
+    public String getCarpet() {
         return carpet;
     }
 
-    public void setCarpet(double carpet) {
+    public void setCarpet(String carpet) {
         this.carpet = carpet;
     }
 
-    public double getLaminate() {
+    public String getLaminate() {
         return laminate;
     }
 
-    public void setLaminate(double laminate) {
+    public void setLaminate(String laminate) {
         this.laminate = laminate;
     }
 
-    public double getTile() {
+    public String getTile() {
         return tile;
     }
 
-    public void setTile(double tile) {
+    public void setTile(String tile) {
         this.tile = tile;
     }
 
-    public double getWood() {
+    public String getWood() {
         return wood;
     }
 
-    public void setWood(double wood) {
+    public void setWood(String wood) {
         this.wood = wood;
     }
     

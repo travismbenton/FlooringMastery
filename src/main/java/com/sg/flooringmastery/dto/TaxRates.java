@@ -11,40 +11,40 @@ package com.sg.flooringmastery.dto;
  */
 public class TaxRates {
     
-    private double OH = .0625;
-    private double PA = .0675;
-    private double MI = .0575;
-    private double IN = .06;
+    private String OH = ".0625";
+    private String PA = ".0675";
+    private String MI = ".0575";
+    private String IN = ".06";
 
-    public double getOH() {
+    public String getOH() {
         return OH;
     }
 
-    public void setOH(double OH) {
+    public void setOH(String OH) {
         this.OH = OH;
     }
 
-    public double getPA() {
+    public String getPA() {
         return PA;
     }
 
-    public void setPA(double PA) {
+    public void setPA(String PA) {
         this.PA = PA;
     }
 
-    public double getMI() {
+    public String getMI() {
         return MI;
     }
 
-    public void setMI(double MI) {
+    public void setMI(String MI) {
         this.MI = MI;
     }
 
-    public double getIN() {
+    public String getIN() {
         return IN;
     }
 
-    public void setIN(double IN) {
+    public void setIN(String IN) {
         this.IN = IN;
     }
 

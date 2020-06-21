@@ -24,15 +24,15 @@ import java.util.Scanner;
  */
 public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     
-    private Map<Integer, Orders> myOrders = new HashMap<>();
+    private Map<String, Orders> myOrders = new HashMap<>();
     
     public static final String ORDERS_FILE = "flooringmastery.txt";
     public static final String DELIMITER = "::"; 
     
     
     @Override
-    public Orders addOrder(int orderNumber, Orders order) 
-            throws FlooringMasteryPersistenceExpection {
+    public Orders addOrder(String orderNumber, Orders order) 
+            throws FlooringMasteryPersistenceException {
         Orders newOrder = myOrders.put(orderNumber, order);
         writeOrder();
         return newOrder;                
@@ -41,23 +41,23 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     
     @Override
     public List<Orders> getAllOrders() 
-            throws FlooringMasteryPersistenceExpection {
+            throws FlooringMasteryPersistenceException {
         loadOrder();
         return new ArrayList<>(myOrders.values());        
     }
     
 
     @Override
-    public Orders getOrder(int orderNumber) 
-            throws FlooringMasteryPersistenceExpection {
+    public Orders getOrder(String orderNumber) 
+            throws FlooringMasteryPersistenceException {
         loadOrder();
         return myOrders.get(orderNumber);        
     }
     
 
     @Override
-    public Orders removeOrder(int orderNumber) 
-            throws FlooringMasteryPersistenceExpection {
+    public Orders removeOrder(String orderNumber) 
+            throws FlooringMasteryPersistenceException {
         Orders removedOrder = myOrders.remove(orderNumber);
         writeOrder();
         return removedOrder;        
@@ -72,7 +72,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     
     
     // -- LOAD - ROSTER --
-    private void loadOrder() throws FlooringMasteryPersistenceExpection {
+    private void loadOrder() throws FlooringMasteryPersistenceException {
         Scanner scanner;
         
         try {   
@@ -81,33 +81,31 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
                     new BufferedReader(
                         new FileReader(ORDERS_FILE)));
         } catch (FileNotFoundException e){
-            throw new FlooringMasteryPersistenceExpection(
+            throw new FlooringMasteryPersistenceException(
                     "-_- Could not load order data into memory", e);
         }
         // currentLine holds the most recent line read from the file
-        String currentLine;
+        String currentLine;        
         String[] currentTokens;
-        double[] currentTokens2 = null;
-        int [] currentTokens3 = null;
+        
         
         while(scanner.hasNextLine()){
             currentLine = scanner.nextLine();
             currentTokens = currentLine.split(DELIMITER);
             
-            Orders currentOrder = new Orders(currentTokens3[0]);
-            
+            Orders currentOrder = new Orders(currentTokens[0]);            
             
             currentOrder.setCustomerName(currentTokens[1]);
 	    currentOrder.setState(currentTokens[2]);
-	    currentOrder.setTaxRate(currentTokens2[3]);
+	    currentOrder.setTaxRate(currentTokens[3]);
             currentOrder.setProductType(currentTokens[4]);
-	    currentOrder.setArea(currentTokens2[5]);
-	    currentOrder.setCostPerSquareFoot(currentTokens2[6]);
-            currentOrder.setLaborCostPerSquareFoot(currentTokens2[7]);
-	    currentOrder.setMaterialCost(currentTokens2[8]);
-	    currentOrder.setLaborCost(currentTokens2[9]);
-            currentOrder.setTax(currentTokens2[10]);
-	    currentOrder.setTotal(currentTokens2[11]);	    
+	    currentOrder.setArea(currentTokens[5]);
+	    currentOrder.setCostPerSquareFoot(currentTokens[6]);
+            currentOrder.setLaborCostPerSquareFoot(currentTokens[7]);
+	    currentOrder.setMaterialCost(currentTokens[8]);
+	    currentOrder.setLaborCost(currentTokens[9]);
+            currentOrder.setTax(currentTokens[10]);
+	    currentOrder.setTotal(currentTokens[11]);	    
             
             myOrders.put(currentOrder.getOrderNumber(), currentOrder);           
         }
@@ -117,14 +115,14 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
 
 
     // -- WRITE - ROSTER --
-    private void writeOrder() throws FlooringMasteryPersistenceExpection {
+    private void writeOrder() throws FlooringMasteryPersistenceException {
 	    
 	    PrintWriter out;
 	    
 	    try {                
 	        out = new PrintWriter(new FileWriter(ORDERS_FILE));
 	    } catch (IOException e) {
-	        throw new FlooringMasteryPersistenceExpection(
+	        throw new FlooringMasteryPersistenceException(
 	                "Could not save order data.", e);
 	    }	    
 	    

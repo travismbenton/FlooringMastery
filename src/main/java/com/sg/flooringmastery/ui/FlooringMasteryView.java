@@ -98,11 +98,12 @@ public class FlooringMasteryView {
     }
     public Orders getNewOrderInfo(){
         
-        int orderNumber = io.readInt("Enter Order Number. ");
+        String orderNumber = io.readString("Enter Order Number. ");
         String customerName = io.readString("Enter Customer Name. ");
         String state = io.readString("Enter Customer State. ");
         String productType = io.readString("Enter Product Type. ");
-        double area = io.readDouble("Enter Projected Area. ");
+        String area = io.readString("Enter Projected Area. ");        
+        
         // -- Create a new "Order" object --
         Orders currentOrder = new Orders(orderNumber);// -- OrderNumber of the "New Order"
         currentOrder.setCustomerName(customerName);
@@ -159,33 +160,35 @@ public class FlooringMasteryView {
                 break;
             default:
                 break;    
-        }       
+        }
+        // -- CALCULATIONS --
+        
         //materialCost = area * costPerSquareFoot
-        double materialCost=0;       
-        BigDecimal decimalMaterialCost = new BigDecimal(Double.toString(materialCost));
-        BigDecimal decimalArea = new BigDecimal(Double.toString(area));  
-        BigDecimal decimalCarpetCostPerSquareFoot = new BigDecimal(Double.toString(productPrice.getCarpet()));
-        BigDecimal decimalLaminateCostPerSquareFoot = new BigDecimal(Double.toString(productPrice.getLaminate()));
-        BigDecimal decimalTileCostPerSquareFoot = new BigDecimal(Double.toString(productPrice.getTile()));
-        BigDecimal decimalWoodCostPerSquareFoot = new BigDecimal(Double.toString(productPrice.getWood()));
+        String materialCost = "0";       
+        BigDecimal decimalMaterialCost = new BigDecimal(materialCost);
+        BigDecimal decimalArea = new BigDecimal(area);  
+        BigDecimal decimalCarpetCostPerSquareFoot = new BigDecimal(productPrice.getCarpet());
+        BigDecimal decimalLaminateCostPerSquareFoot = new BigDecimal(productPrice.getLaminate());
+        BigDecimal decimalTileCostPerSquareFoot = new BigDecimal(productPrice.getTile());
+        BigDecimal decimalWoodCostPerSquareFoot = new BigDecimal(productPrice.getWood());
         //laborCost = (area * laborCostPerSquareFoot)
-        double laborCost=0;
-        BigDecimal decimalLaborCost = new BigDecimal(Double.toString(laborCost));
-        BigDecimal decimalCarpetLaborCostPerSquareFoot = new BigDecimal(Double.toString(productLaborCost.getCarpet()));
+        String laborCost = "0";
+        BigDecimal decimalLaborCost = new BigDecimal(laborCost);
+        BigDecimal decimalCarpetLaborCostPerSquareFoot = new BigDecimal(productLaborCost.getCarpet());
         //System.out.println("Carpet Labor Cost Test: "+decimalCarpetLaborCostPerSquareFoot);
-        BigDecimal decimalLaminateLaborCostPerSquareFoot = new BigDecimal(Double.toString(productLaborCost.getLaminate()));
-        BigDecimal decimalTileLaborCostPerSquareFoot = new BigDecimal(Double.toString(productLaborCost.getTile()));
-        BigDecimal decimalWoodLaborCostPerSquareFoot = new BigDecimal(Double.toString(productLaborCost.getWood()));
-        double tax=0;
-        BigDecimal decimalTax = new BigDecimal(Double.toString(tax));
-        BigDecimal decimalOHTaxRate = new BigDecimal(Double.toString(taxRate.getOH()));
+        BigDecimal decimalLaminateLaborCostPerSquareFoot = new BigDecimal(productLaborCost.getLaminate());
+        BigDecimal decimalTileLaborCostPerSquareFoot = new BigDecimal(productLaborCost.getTile());
+        BigDecimal decimalWoodLaborCostPerSquareFoot = new BigDecimal(productLaborCost.getWood());
+        String tax = "0";
+        BigDecimal decimalTax = new BigDecimal(tax);
+        BigDecimal decimalOHTaxRate = new BigDecimal(taxRate.getOH());
         //System.out.println("Tax Test: "+decimalOHTaxRate);
-        BigDecimal decimalPATaxRate = new BigDecimal(Double.toString(taxRate.getPA()));
-        BigDecimal decimalMITaxRate = new BigDecimal(Double.toString(taxRate.getMI()));
-        BigDecimal decimalINTaxRate = new BigDecimal(Double.toString(taxRate.getIN()));
+        BigDecimal decimalPATaxRate = new BigDecimal(taxRate.getPA());
+        BigDecimal decimalMITaxRate = new BigDecimal(taxRate.getMI());
+        BigDecimal decimalINTaxRate = new BigDecimal(taxRate.getIN());
         //Total = (MaterialCost + LaborCost + Tax)
-        double total=0;
-        BigDecimal decimalTotal = new BigDecimal(Double.toString(total));        
+        String total = "0";
+        BigDecimal decimalTotal = new BigDecimal(total);        
         
         // -- BIG DECIMAL  COST PER SQUARE FOOT --
         switch (productType.toLowerCase()){
@@ -230,14 +233,14 @@ public class FlooringMasteryView {
         //Total = (MaterialCost + LaborCost + Tax)
         decimalTotal = decimalMaterialCost.add(decimalLaborCost).add(decimalTax).setScale(2, RoundingMode.HALF_UP);
         
-        // -- Big Decimal  Conversion back to Double --
-        materialCost = decimalMaterialCost.doubleValue();        
+        // -- Big Decimal  Conversion back to String --
+        materialCost = decimalMaterialCost.toString();
         currentOrder.setMaterialCost(materialCost);
-        laborCost = decimalLaborCost.doubleValue();
+        laborCost = decimalLaborCost.toString();
         currentOrder.setLaborCost(laborCost);        
-        tax = decimalTax.doubleValue();
+        tax = decimalTax.toString();
         currentOrder.setTax(tax);
-        total = decimalTotal.doubleValue();        
+        total = decimalTotal.toString();        
         currentOrder.setTotal(total);       
                         
        
@@ -249,8 +252,8 @@ public class FlooringMasteryView {
         
         boolean submit = true;
         do {
-            io.print("  ===  Order Summary  ===  ");
             io.print("");
+            io.print("  ===  Order Summary  ===  ");
             io.print("Order Number: "+newOrder.getOrderNumber());
 	    io.print("Customer Name: "+newOrder.getCustomerName());
 	    io.print("Customer State: "+newOrder.getState());
@@ -263,8 +266,8 @@ public class FlooringMasteryView {
             io.print("Labor Cost: $"+newOrder.getLaborCost());
             io.print("Tax: $"+newOrder.getTax());
             io.print("Total: $"+newOrder.getTotal());    
+            io.print("  ===  END:  Order Summary  ===  ");
             io.print("");
-            io.print("  ===  END:  Order Summary  ===  ");        
         
         String submitOrder = io.readString("Would you like to submit this order \"Y/N\" ").toUpperCase();
         if (submitOrder.equals("Y") || submitOrder.equals("YES")){
@@ -291,6 +294,186 @@ public class FlooringMasteryView {
     public void displayEditOrderBanner() {
 	io.print("=== Edit Order ===");
     } 
+    public void displayFindOrder(Orders order) {
+	if (order != null) {
+            
+            io.print("");
+	    io.print("  ===  Order Summary  ===  ");
+            io.print("Order Number: "+order.getOrderNumber());
+	    io.print("Customer Name: "+order.getCustomerName());
+	    io.print("Customer State: "+order.getState());
+            io.print("Tax Rate: $"+order.getTaxRate());
+	    io.print("Product Type: "+order.getProductType());
+            io.print("Projected Area: "+order.getArea());            
+	    io.print("Product Cost Per Square Foot: $"+order.getCostPerSquareFoot());
+	    io.print("Labor Cost Per Square Foot: $"+order.getLaborCostPerSquareFoot());
+	    io.print("Material Cost: $"+order.getMaterialCost());
+            io.print("Labor Cost: $"+order.getLaborCost());
+            io.print("Tax: $"+order.getTax());
+            io.print("Total: $"+order.getTotal());    
+            io.print("  ===  END:  Order Summary  ===  ");
+            io.print("");
+            
+	} else {
+	    io.print("No such \"Order\" exist.");
+	}
+	    io.readString("Press enter to continue.");
+            
+    }
+    public Orders editExistingOrderInfo(Orders order){
+        
+        String orderNumber = io.readString("Order Number: "+order.getOrderNumber());  
+        String customerName = io.readString("Enter Customer Name. "+order.getCustomerName());   
+        String state = io.readString("Enter State. "+order.getState());        
+        String productType = io.readString("Enter Product Type. "+order.getProductType());
+        String area = io.readString("Enter Projected Area. "+order.getArea());        
+        
+        // -- Create a new "Order" object --
+        Orders currentOrder = new Orders(orderNumber);// -- OrderNumber of the "New Order"        
+        
+        currentOrder.setCustomerName(customerName);                   
+        currentOrder.setState(state);           
+        
+        
+        // -- TAXE RATES --
+        switch (state.toUpperCase()){
+            case "OH":
+                currentOrder.setTaxRate(taxRate.getOH());
+                break;
+            case "PA":
+                currentOrder.setTaxRate(taxRate.getPA());                
+                break;
+            case "MI":
+                currentOrder.setTaxRate(taxRate.getMI());                
+                break;
+            case "IN":
+                currentOrder.setTaxRate(taxRate.getIN());                
+                break;
+            default:
+                break;
+        }        
+        currentOrder.setProductType(productType);
+        
+        currentOrder.setArea(area);
+        // -- COST PER SQUARE FOOT --
+        switch (productType.toLowerCase()){
+            case "carpet":
+                currentOrder.setCostPerSquareFoot(productPrice.getCarpet());
+                break;
+            case "laminate":
+                currentOrder.setCostPerSquareFoot(productPrice.getLaminate());                
+                break;
+            case "tile":
+                currentOrder.setCostPerSquareFoot(productPrice.getTile());               
+                break;
+            case "wood":    
+                currentOrder.setCostPerSquareFoot(productPrice.getWood());
+            default:
+                break;     
+        }
+        // -- LABOR COST PER SQUARE FOOT --
+        switch (productType.toLowerCase()){
+            case "carpet":
+                currentOrder.setLaborCostPerSquareFoot(productLaborCost.getCarpet());
+                break;
+            case "laminate":
+                currentOrder.setLaborCostPerSquareFoot(productLaborCost.getLaminate());                
+                break;
+            case "tile":
+                currentOrder.setLaborCostPerSquareFoot(productLaborCost.getTile());               
+                break;
+            case "wood":
+                currentOrder.setLaborCostPerSquareFoot(productLaborCost.getWood());                
+                break;
+            default:
+                break;    
+        }
+        // -- CALCULATIONS --
+        
+        //materialCost = area * costPerSquareFoot
+        String materialCost = "0";       
+        BigDecimal decimalMaterialCost = new BigDecimal(materialCost);
+        BigDecimal decimalArea = new BigDecimal(area);  
+        BigDecimal decimalCarpetCostPerSquareFoot = new BigDecimal(productPrice.getCarpet());
+        BigDecimal decimalLaminateCostPerSquareFoot = new BigDecimal(productPrice.getLaminate());
+        BigDecimal decimalTileCostPerSquareFoot = new BigDecimal(productPrice.getTile());
+        BigDecimal decimalWoodCostPerSquareFoot = new BigDecimal(productPrice.getWood());
+        //laborCost = (area * laborCostPerSquareFoot)
+        String laborCost = "0";
+        BigDecimal decimalLaborCost = new BigDecimal(laborCost);
+        BigDecimal decimalCarpetLaborCostPerSquareFoot = new BigDecimal(productLaborCost.getCarpet());
+        //System.out.println("Carpet Labor Cost Test: "+decimalCarpetLaborCostPerSquareFoot);
+        BigDecimal decimalLaminateLaborCostPerSquareFoot = new BigDecimal(productLaborCost.getLaminate());
+        BigDecimal decimalTileLaborCostPerSquareFoot = new BigDecimal(productLaborCost.getTile());
+        BigDecimal decimalWoodLaborCostPerSquareFoot = new BigDecimal(productLaborCost.getWood());
+        String tax = "0";
+        BigDecimal decimalTax = new BigDecimal(tax);
+        BigDecimal decimalOHTaxRate = new BigDecimal(taxRate.getOH());
+        //System.out.println("Tax Test: "+decimalOHTaxRate);
+        BigDecimal decimalPATaxRate = new BigDecimal(taxRate.getPA());
+        BigDecimal decimalMITaxRate = new BigDecimal(taxRate.getMI());
+        BigDecimal decimalINTaxRate = new BigDecimal(taxRate.getIN());
+        //Total = (MaterialCost + LaborCost + Tax)
+        String total = "0";
+        BigDecimal decimalTotal = new BigDecimal(total);        
+        
+        // -- BIG DECIMAL  COST PER SQUARE FOOT --
+        switch (productType.toLowerCase()){
+            case "carpet":
+                decimalMaterialCost = decimalArea.multiply(decimalCarpetCostPerSquareFoot).setScale(2, RoundingMode.HALF_UP);
+                decimalLaborCost = decimalArea.multiply(decimalCarpetLaborCostPerSquareFoot).setScale(2, RoundingMode.HALF_UP);
+                break;
+            case "laminate":
+                decimalMaterialCost = decimalArea.multiply(decimalLaminateCostPerSquareFoot).setScale(2, RoundingMode.HALF_UP); 
+                decimalLaborCost = decimalArea.multiply(decimalLaminateLaborCostPerSquareFoot).setScale(2, RoundingMode.HALF_UP); 
+                break;
+            case "tile":
+                decimalMaterialCost = decimalArea.multiply(decimalTileCostPerSquareFoot).setScale(2, RoundingMode.HALF_UP);   
+                decimalLaborCost = decimalArea.multiply(decimalTileLaborCostPerSquareFoot).setScale(2, RoundingMode.HALF_UP);
+                break;
+            case "wood":
+                decimalMaterialCost = decimalArea.multiply(decimalWoodCostPerSquareFoot).setScale(2, RoundingMode.HALF_UP);  
+                decimalLaborCost = decimalArea.multiply(decimalWoodLaborCostPerSquareFoot).setScale(2, RoundingMode.HALF_UP);
+                break; 
+            default:
+                break;     
+        }        
+        
+        // -- BIG DECIMAL  TAX RATES --
+        switch (state.toUpperCase()){
+            case "OH":
+                decimalTax = decimalMaterialCost.add(decimalLaborCost).multiply(decimalOHTaxRate).setScale(2, RoundingMode.HALF_UP);
+                break;
+            case "PA":
+                 decimalTax = decimalMaterialCost.add(decimalLaborCost).multiply(decimalPATaxRate).setScale(2, RoundingMode.HALF_UP);               
+                break;
+            case "MI":
+                 decimalTax = decimalMaterialCost.add(decimalLaborCost).multiply(decimalMITaxRate).setScale(2, RoundingMode.HALF_UP);              
+                break;
+            case "IN":
+                 decimalTax = decimalMaterialCost.add(decimalLaborCost).multiply(decimalINTaxRate).setScale(2, RoundingMode.HALF_UP);               
+                break;
+            default:
+                break;
+        } 
+        
+        //Total = (MaterialCost + LaborCost + Tax)
+        decimalTotal = decimalMaterialCost.add(decimalLaborCost).add(decimalTax).setScale(2, RoundingMode.HALF_UP);
+        
+        // -- Big Decimal  Conversion back to String --
+        materialCost = decimalMaterialCost.toString();
+        currentOrder.setMaterialCost(materialCost);
+        laborCost = decimalLaborCost.toString();
+        currentOrder.setLaborCost(laborCost);        
+        tax = decimalTax.toString();
+        currentOrder.setTax(tax);
+        total = decimalTotal.toString();        
+        currentOrder.setTotal(total);       
+                        
+       
+        return currentOrder;         
+               
+    }    
     public void displayEditOrderSuccessBanner(){
         io.readString("Edit successful. "
                 + "Please hit enter to continue. ");
@@ -303,8 +486,8 @@ public class FlooringMasteryView {
     public void displayRemoveOrderBanner() {
 	io.print("=== Remove Order ===");
     } 
-     public int getOrderNumberChoice(){
-        return io.readInt("Please enter Order Number.");
+     public String getOrderNumberChoice(){
+        return io.readString("Please enter Order Number.");
     }
     public void displayRemoveOrderSuccessfulBanner() {
 	io.readString("Order successfully removed. "
@@ -332,6 +515,8 @@ public class FlooringMasteryView {
     }
     public void displayListAllOrders(List<Orders> orderList){        
         for (Orders existingOrders : orderList){
+            io.print("  ===  Order Summary  ===  ");
+            io.print("");
             io.print("Order Number: "+existingOrders.getOrderNumber());
 	    io.print("Customer Name: "+existingOrders.getCustomerName());
 	    io.print("Customer State: "+existingOrders.getState());
