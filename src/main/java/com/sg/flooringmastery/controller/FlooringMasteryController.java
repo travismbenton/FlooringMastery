@@ -7,6 +7,7 @@ package com.sg.flooringmastery.controller;
 
 import com.sg.flooringmastery.dao.FlooringMasteryPersistenceException;
 import com.sg.flooringmastery.dto.Orders;
+import com.sg.flooringmastery.service.FloorMasteryValidateSubmitException;
 import com.sg.flooringmastery.service.FlooringMasteryDataValidationException;
 import com.sg.flooringmastery.service.FlooringMasteryDuplicateIdException;
 import com.sg.flooringmastery.service.FlooringMasteryServiceLayer;
@@ -23,7 +24,8 @@ public class FlooringMasteryController {
     FlooringMasteryView view; 
     
     // --  CONSTRUCTOR -- 
-    public FlooringMasteryController (FlooringMasteryServiceLayer service, FlooringMasteryView view) {
+    public FlooringMasteryController (FlooringMasteryServiceLayer service,
+            FlooringMasteryView view) {
         this.service = service;
         this.view = view;        
     }
@@ -31,7 +33,8 @@ public class FlooringMasteryController {
     
     public void run() throws FlooringMasteryPersistenceException, 
                              FlooringMasteryDuplicateIdException, 
-                             FlooringMasteryDataValidationException{
+                             FlooringMasteryDataValidationException,
+                             FloorMasteryValidateSubmitException{
         
         int menuSelection = 0;
         boolean keepGoing = true;
@@ -73,7 +76,7 @@ public class FlooringMasteryController {
         exitMessage();
         
         } catch (FlooringMasteryPersistenceException | NumberFormatException 
-                | NullPointerException e){
+                | NullPointerException | ArrayIndexOutOfBoundsException e){
             run();
             //view.displayErrorMessage(e.getMessage());
         }        
@@ -114,20 +117,26 @@ public class FlooringMasteryController {
         
     // -- ADD ORDER  SECTION --    
     private void addOrder() throws FlooringMasteryPersistenceException, 
-                                   FlooringMasteryDuplicateIdException,
+                                   FlooringMasteryDuplicateIdException, 
+                                   FloorMasteryValidateSubmitException,
                                    FlooringMasteryDataValidationException {
         view.displayCreateOrderBanner();
         boolean hasErrors = false;
-        do {
-            Orders newOrder = view.getNewOrderInfo();
-            try {                  
-                service.createOrder(newOrder);
+        do {    
+            //Orders order = ;
+                Orders newOrder = view.getNewOrderInfo();                
+            try {
+                view.displayVerifyOrderSummary(newOrder);
+                service.createOrder(newOrder);                
                 view.displayCreateOrderSuccessBanner();  
                 hasErrors = false;
             } catch (FlooringMasteryDataValidationException | 
-                     FlooringMasteryDuplicateIdException e){
+                     FlooringMasteryDuplicateIdException e) {                      
                 hasErrors = true;
                 view.displayErrorMessage(e.getMessage());
+            } catch (FloorMasteryValidateSubmitException e){
+                hasErrors = true;
+                run();
             }
                 
         } while(hasErrors);    
@@ -139,6 +148,7 @@ public class FlooringMasteryController {
     // -- EDIT ORDER  SECTION --    
     private void editOrder() throws FlooringMasteryPersistenceException, 
                                     FlooringMasteryDuplicateIdException,
+                                    FloorMasteryValidateSubmitException,
                                     FlooringMasteryDataValidationException {
         view.displayEditOrderBanner();
         boolean hasErrors = false;
@@ -146,11 +156,13 @@ public class FlooringMasteryController {
             String existingOrderNumber = view.getEditOrderNumberChoice();
             Orders order = service.getOrder(existingOrderNumber);
             Orders newOrder = view.editExistingOrderInfo(order);
+            view.displayVerifyOrderSummary(newOrder);
         try {
             service.editOrder(newOrder);
             view.displayEditOrderSuccessBanner();
                 hasErrors = false;
-        } catch (FlooringMasteryDataValidationException e){
+        } catch (FlooringMasteryDataValidationException | 
+                 FlooringMasteryDuplicateIdException e){
                 hasErrors = true;
                 view.displayErrorMessage(e.getMessage());
         }   
@@ -183,7 +195,8 @@ public class FlooringMasteryController {
     // -- SAVE CURRENT WORK  SECTION --    
     private void saveCurrentWork() throws FlooringMasteryPersistenceException, 
                                           FlooringMasteryDuplicateIdException,
-                                          FlooringMasteryDataValidationException {
+                                          FlooringMasteryDataValidationException,
+                                          FloorMasteryValidateSubmitException {
         view.displaySaveCurrentWorkBanner();
         run();
         view.displaySaveCurrentWorkSuccessBanner();

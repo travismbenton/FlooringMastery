@@ -14,6 +14,7 @@ import com.sg.flooringmastery.dao.FlooringMasteryPersistenceException;
 import com.sg.flooringmastery.dto.ProductLaborCost;
 import com.sg.flooringmastery.dto.ProductPrice;
 import com.sg.flooringmastery.dto.TaxRates;
+import com.sg.flooringmastery.service.FloorMasteryValidateSubmitException;
 import com.sg.flooringmastery.service.FlooringMasteryDataValidationException;
 import com.sg.flooringmastery.service.FlooringMasteryDuplicateIdException;
 import com.sg.flooringmastery.service.FlooringMasteryServiceLayer;
@@ -31,7 +32,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class App {
     public static void main(String[] args) throws FlooringMasteryPersistenceException, 
                                                   FlooringMasteryDuplicateIdException,
-                                                  FlooringMasteryDataValidationException {
+                                                  FlooringMasteryDataValidationException,
+                                                  FloorMasteryValidateSubmitException {
         
         ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
         FlooringMasteryController controller = ctx.getBean("controller", FlooringMasteryController.class);

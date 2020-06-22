@@ -17,12 +17,14 @@ public interface FlooringMasteryServiceLayer {
     
     public void createOrder(Orders order) throws 
             FlooringMasteryPersistenceException, 
-            FlooringMasteryDataValidationException, 
+            FlooringMasteryDataValidationException,
+            FloorMasteryValidateSubmitException,
             FlooringMasteryDuplicateIdException;
     
     public void editOrder(Orders order) throws 
             FlooringMasteryPersistenceException, 
-            FlooringMasteryDataValidationException, 
+            FlooringMasteryDataValidationException,
+            FloorMasteryValidateSubmitException,
             FlooringMasteryDuplicateIdException;            
  
     public List<Orders> getAllOrders() throws

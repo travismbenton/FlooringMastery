@@ -9,16 +9,20 @@ import com.sg.flooringmastery.dto.Orders;
 import com.sg.flooringmastery.dto.ProductLaborCost;
 import com.sg.flooringmastery.dto.ProductPrice;
 import com.sg.flooringmastery.dto.TaxRates;
+import java.io.File;
+import static java.lang.System.out;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Scanner;
+import org.eclipse.core.internal.runtime.Product;
 
 /**
  *
  * @author travi
  */
 public class FlooringMasteryView {
-    
+   
     private UserIO io; 
     TaxRates taxRate;
     ProductPrice productPrice;
@@ -102,7 +106,7 @@ public class FlooringMasteryView {
         String customerName = io.readString("Enter Customer Name. ");
         String state = io.readString("Enter Customer State. ");
         String productType = io.readString("Enter Product Type. ");
-        String area = io.readString("Enter Projected Area. ");        
+        String area = io.readString("Enter Projected Area.(100ft Min) "); 
         
         // -- Create a new "Order" object --
         Orders currentOrder = new Orders(orderNumber);// -- OrderNumber of the "New Order"
@@ -165,8 +169,9 @@ public class FlooringMasteryView {
         
         //materialCost = area * costPerSquareFoot
         String materialCost = "0";       
-        BigDecimal decimalMaterialCost = new BigDecimal(materialCost);
-        BigDecimal decimalArea = new BigDecimal(area);  
+        BigDecimal decimalMaterialCost = new BigDecimal(materialCost);        
+        BigDecimal decimalArea = new BigDecimal(area);        
+        
         BigDecimal decimalCarpetCostPerSquareFoot = new BigDecimal(productPrice.getCarpet());
         BigDecimal decimalLaminateCostPerSquareFoot = new BigDecimal(productPrice.getLaminate());
         BigDecimal decimalTileCostPerSquareFoot = new BigDecimal(productPrice.getTile());
@@ -241,8 +246,9 @@ public class FlooringMasteryView {
         tax = decimalTax.toString();
         currentOrder.setTax(tax);
         total = decimalTotal.toString();        
-        currentOrder.setTotal(total);       
-                        
+        currentOrder.setTotal(total);   
+        
+                          
        
         return currentOrder;         
                
@@ -268,6 +274,31 @@ public class FlooringMasteryView {
             io.print("");        
         
    }
+    
+    public void displayVerifyOrderSummary(Orders newOrder){        
+       
+            io.print("");
+            io.print("  ===  Order Summary  ===  ");
+            io.print("Order Number: "+newOrder.getOrderNumber());
+	    io.print("Customer Name: "+newOrder.getCustomerName());
+	    io.print("Customer State: "+newOrder.getState());
+            io.print("Tax Rate: $"+newOrder.getTaxRate());
+	    io.print("Product Type: "+newOrder.getProductType());
+            io.print("Projected Area: "+newOrder.getArea());            
+	    io.print("Product Cost Per Square Foot: $"+newOrder.getCostPerSquareFoot());
+	    io.print("Labor Cost Per Square Foot: $"+newOrder.getLaborCostPerSquareFoot());
+	    io.print("Material Cost: $"+newOrder.getMaterialCost());
+            io.print("Labor Cost: $"+newOrder.getLaborCost());
+            io.print("Tax: $"+newOrder.getTax());
+            io.print("Total: $"+newOrder.getTotal());    
+            io.print("  ===  END:  Order Summary  ===  ");
+            io.print("");  
+            
+            //io.readString("Press enter to continue.");
+            String submitOrder = io.readString("Would you like to \"Submit\" this order? Y/N");          
+            newOrder.setSubmitOrder(submitOrder);
+            
+    }
     
     public void displayCreateOrderSuccessBanner(){
         io.readString("New Order successfully "

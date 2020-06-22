@@ -8,6 +8,7 @@ package com.sg.flooringmastery.dao;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -28,8 +29,9 @@ public class FlooringMasteryAuditDaoImpl implements FlooringMasteryAuditDao {
             throw new FlooringMasteryPersistenceException("Could not persist audit information.", e);
         }
  
-        LocalDateTime timestamp = LocalDateTime.now();
+        LocalDate timestamp = LocalDate.now();
         out.println(timestamp.toString() + " : " + entry);
-        out.flush();
+ 
+        out.flush(); 
     }
 }

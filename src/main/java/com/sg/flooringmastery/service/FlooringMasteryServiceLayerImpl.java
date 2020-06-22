@@ -30,6 +30,7 @@ public class FlooringMasteryServiceLayerImpl implements FlooringMasteryServiceLa
 
     @Override
     public void createOrder(Orders order) throws FlooringMasteryPersistenceException,
+                                                 FloorMasteryValidateSubmitException,
                                                  FlooringMasteryDataValidationException,
                                                  FlooringMasteryDuplicateIdException {
         if(dao.getOrder(order.getOrderNumber()) != null) {
@@ -38,16 +39,20 @@ public class FlooringMasteryServiceLayerImpl implements FlooringMasteryServiceLa
                             +order.getOrderNumber()
                             +" already exists");
         }
-        validateOrderData(order);
+        validateRequiredFields(order);
+        validateAreaSquareFeet(order);        
+        validateSumitOrder(order);        
         dao.addOrder(order.getOrderNumber(), order);
         auditDao.writeAuditEntry("New Order: "+order.getOrderNumber()+" CREATED.");
     }
 
     @Override
     public void editOrder(Orders order) throws FlooringMasteryPersistenceException,
+                                               FloorMasteryValidateSubmitException, 
                                                FlooringMasteryDataValidationException,
                                                FlooringMasteryDuplicateIdException {
-        validateOrderData(order);
+        validateRequiredFields(order);
+        validateAreaSquareFeet(order);        
         dao.addOrder(order.getOrderNumber(), order);
         auditDao.writeAuditEntry("Existing Order: "+order.getOrderNumber()+" EDITED.");
     }
@@ -70,19 +75,43 @@ public class FlooringMasteryServiceLayerImpl implements FlooringMasteryServiceLa
     }
     
     
-    public void validateOrderData(Orders order) throws 
+    public void validateRequiredFields(Orders order) throws 
+            FlooringMasteryDataValidationException {        
+        if (order.getCustomerName() == null || order.getCustomerName().trim().length() == 0) {                        
+            throw new FlooringMasteryDataValidationException (
+                    "ERROR: [Customer Name] is a required field.");                                        
+        }         
+    }    
+    
+    
+    public void validateAreaSquareFeet(Orders order) throws 
             FlooringMasteryDataValidationException {            
         
-        if (order.getCustomerName() == null || order.getCustomerName().trim().length() == 0
-            || order.getState() == null || order.getState().trim().length() == 0    
-            || order.getProductType() == null || order.getProductType().trim().length() == 0
-            || order.getArea() == null || order.getArea().trim().length() == 0) {
-            
+        if (Double.valueOf(order.getArea()) < 100) {            
             throw new FlooringMasteryDataValidationException (
-                    "ERROR: All fields [Order Number, Customer Name, State, "
-                            + " Product Type and Area] are required.");            
+                    "ERROR: [Area: Minimum 100sqft] is required.");                                        
         }                
     }
+    
+    
+    public void validateSumitOrder(Orders order) throws FloorMasteryValidateSubmitException, 
+                                                        FlooringMasteryDataValidationException {
+        if (order.getSubmitOrder() == null || order.getSubmitOrder().trim().length() == 0) {                        
+            throw new FlooringMasteryDataValidationException (
+                    "ERROR: [Submit Order \"Y/N\"] is a required field.");
+        }
+        if (order.getSubmitOrder().equalsIgnoreCase("n")){ 
+            //order = null;
+            throw new FloorMasteryValidateSubmitException (
+                    "Order Removed Successfully!");         
+        } 
+        
+    }
+        
+        
+   
+    
+    
     
     
 }

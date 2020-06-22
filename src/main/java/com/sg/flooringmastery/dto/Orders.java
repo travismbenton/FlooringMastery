@@ -25,6 +25,8 @@ public class Orders {
     private String laborCost;
     private String tax;
     private String total;
+    private String submitOrder;
+    
     
     public Orders(String orderNumber) {
         this.orderNumber = orderNumber;
@@ -32,12 +34,8 @@ public class Orders {
 
     public String getOrderNumber() {
         return orderNumber;
-    }
-/*
-    public void setOrderNumber(String orderNumber) {
-        this.orderNumber = orderNumber;
-    }
-*/
+    }    
+
     public String getCustomerName() {
         return customerName;
     }
@@ -126,7 +124,17 @@ public class Orders {
         this.total = total;
     }
 
+    public String getSubmitOrder() {
+        return submitOrder;
+    }
+
+    public void setSubmitOrder(String submitOrder) {
+        this.submitOrder = submitOrder;
+    }
+    
     
 
+    
+    
     
 }

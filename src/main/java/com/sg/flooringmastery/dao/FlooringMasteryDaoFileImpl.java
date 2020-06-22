@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +28,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     
     private Map<String, Orders> myOrders = new HashMap<>();
     
-    public static final String ORDERS_FILE = "flooringmastery.txt";
+    public static final String ORDERS_FILE = "Orders_MMDDYYYY.txt";
     public static final String DELIMITER = "::"; 
     
     
@@ -127,6 +128,8 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
 	                "Could not save order data.", e);
 	    }	    
 	    
+            
+            
 	    List<Orders> orderList = this.getAllOrders();
 	    for (Orders currentOrder : orderList) {
 	        // write the Student object to the file
@@ -142,7 +145,9 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
                         + currentOrder.getLaborCost()+ DELIMITER 
 	                + currentOrder.getTax()+ DELIMITER 
                         + currentOrder.getTotal()); 
-	               
+	        
+               // LocalDate ld = LocalDate.now();
+                //out.println(ld.toString());
 	        // force PrintWriter to write line to the file
 	        out.flush();
 	    }
