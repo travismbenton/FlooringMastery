@@ -248,10 +248,8 @@ public class FlooringMasteryView {
                
     }    
     
-    public Orders displayOrderSummary(Orders newOrder){
-        
-        boolean submit = true;
-        do {
+    public void displayOrderSummary(Orders newOrder){        
+       
             io.print("");
             io.print("  ===  Order Summary  ===  ");
             io.print("Order Number: "+newOrder.getOrderNumber());
@@ -267,18 +265,8 @@ public class FlooringMasteryView {
             io.print("Tax: $"+newOrder.getTax());
             io.print("Total: $"+newOrder.getTotal());    
             io.print("  ===  END:  Order Summary  ===  ");
-            io.print("");
+            io.print("");        
         
-        String submitOrder = io.readString("Would you like to submit this order \"Y/N\" ").toUpperCase();
-        if (submitOrder.equals("Y") || submitOrder.equals("YES")){
-            submit = false;
-            break;           
-            
-        }
-        
-        }while(submit);
-        
-        return null;
    }
     
     public void displayCreateOrderSuccessBanner(){
@@ -294,6 +282,9 @@ public class FlooringMasteryView {
     public void displayEditOrderBanner() {
 	io.print("=== Edit Order ===");
     } 
+    public String getEditOrderNumberChoice(){
+        return io.readString("Which Order Number would you like to edit .");
+    }
     public void displayFindOrder(Orders order) {
 	if (order != null) {
             

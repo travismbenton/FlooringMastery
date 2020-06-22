@@ -6,6 +6,7 @@
 package com.sg.flooringmastery.dao;
 
 import com.sg.flooringmastery.dto.Orders;
+import com.sg.flooringmastery.service.FlooringMasteryDuplicateIdException;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -32,7 +33,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     
     @Override
     public Orders addOrder(String orderNumber, Orders order) 
-            throws FlooringMasteryPersistenceException {
+            throws FlooringMasteryPersistenceException, FlooringMasteryDuplicateIdException {
         Orders newOrder = myOrders.put(orderNumber, order);
         writeOrder();
         return newOrder;                

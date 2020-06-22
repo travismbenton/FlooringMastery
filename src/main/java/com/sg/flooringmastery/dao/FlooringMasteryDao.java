@@ -6,6 +6,7 @@
 package com.sg.flooringmastery.dao;
 
 import com.sg.flooringmastery.dto.Orders;
+import com.sg.flooringmastery.service.FlooringMasteryDuplicateIdException;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ import java.util.List;
 public interface FlooringMasteryDao {
     
     Orders addOrder(String orderNumber, Orders order)
-            throws FlooringMasteryPersistenceException;
+            throws FlooringMasteryPersistenceException, FlooringMasteryDuplicateIdException;
     
     List<Orders> getAllOrders()
             throws FlooringMasteryPersistenceException; 

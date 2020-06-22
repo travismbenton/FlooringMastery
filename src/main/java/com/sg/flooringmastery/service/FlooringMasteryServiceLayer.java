@@ -16,10 +16,14 @@ import java.util.List;
 public interface FlooringMasteryServiceLayer {
     
     public void createOrder(Orders order) throws 
-            FlooringMasteryPersistenceException;
+            FlooringMasteryPersistenceException, 
+            FlooringMasteryDataValidationException, 
+            FlooringMasteryDuplicateIdException;
     
     public void editOrder(Orders order) throws 
-            FlooringMasteryPersistenceException;            
+            FlooringMasteryPersistenceException, 
+            FlooringMasteryDataValidationException, 
+            FlooringMasteryDuplicateIdException;            
  
     public List<Orders> getAllOrders() throws
             FlooringMasteryPersistenceException;

@@ -5,9 +5,11 @@
  */
 package com.sg.flooringmastery.controller;
 
-import com.sg.flooringmastery.dao.FlooringMasteryDao;
 import com.sg.flooringmastery.dao.FlooringMasteryPersistenceException;
 import com.sg.flooringmastery.dto.Orders;
+import com.sg.flooringmastery.service.FlooringMasteryDataValidationException;
+import com.sg.flooringmastery.service.FlooringMasteryDuplicateIdException;
+import com.sg.flooringmastery.service.FlooringMasteryServiceLayer;
 import com.sg.flooringmastery.ui.FlooringMasteryView;
 import java.util.List;
 
@@ -17,17 +19,19 @@ import java.util.List;
  */
 public class FlooringMasteryController {    
      
-    FlooringMasteryDao dao; 
+    FlooringMasteryServiceLayer service; 
     FlooringMasteryView view; 
     
     // --  CONSTRUCTOR -- 
-    public FlooringMasteryController (FlooringMasteryDao dao, FlooringMasteryView view) {
-        this.dao = dao;
+    public FlooringMasteryController (FlooringMasteryServiceLayer service, FlooringMasteryView view) {
+        this.service = service;
         this.view = view;        
     }
     // -- "END" CONSTRUCTOR -- 
     
-    public void run() throws FlooringMasteryPersistenceException{
+    public void run() throws FlooringMasteryPersistenceException, 
+                             FlooringMasteryDuplicateIdException, 
+                             FlooringMasteryDataValidationException{
         
         int menuSelection = 0;
         boolean keepGoing = true;
@@ -101,7 +105,7 @@ public class FlooringMasteryController {
     private void displayOrders() throws FlooringMasteryPersistenceException {
         view.displayOrdersListBanner();
         String newDate = view.getOrderDateChoice();
-        List<Orders> orderList = dao.getAllOrders();
+        List<Orders> orderList = service.getAllOrders();
        // view.displayOrderList(orderList);
     }           
     // -- "END" DISPLAY ORDERS  SECTION --
@@ -109,27 +113,50 @@ public class FlooringMasteryController {
     //---------------------------------------------------------|      
         
     // -- ADD ORDER  SECTION --    
-    private void addOrder() throws FlooringMasteryPersistenceException {
+    private void addOrder() throws FlooringMasteryPersistenceException, 
+                                   FlooringMasteryDuplicateIdException,
+                                   FlooringMasteryDataValidationException {
         view.displayCreateOrderBanner();
-        Orders newOrder = view.getNewOrderInfo();                
-        //view.displayOrderSummary(newOrder);        
-        dao.addOrder(newOrder.getOrderNumber(), newOrder);
-        view.displayCreateOrderSuccessBanner();                 
+        boolean hasErrors = false;
+        do {
+            Orders newOrder = view.getNewOrderInfo();
+            try {                  
+                service.createOrder(newOrder);
+                view.displayCreateOrderSuccessBanner();  
+                hasErrors = false;
+            } catch (FlooringMasteryDataValidationException | 
+                     FlooringMasteryDuplicateIdException e){
+                hasErrors = true;
+                view.displayErrorMessage(e.getMessage());
+            }
+                
+        } while(hasErrors);    
     }         
     // -- "END" ADD ORDER  SECTION --
     
     //---------------------------------------------------------|    
         
     // -- EDIT ORDER  SECTION --    
-    private void editOrder() throws FlooringMasteryPersistenceException {
+    private void editOrder() throws FlooringMasteryPersistenceException, 
+                                    FlooringMasteryDuplicateIdException,
+                                    FlooringMasteryDataValidationException {
         view.displayEditOrderBanner();
-        String existingOrderNumber = view.getOrderNumberChoice();
-        Orders order = dao.getOrder(existingOrderNumber);
-        view.displayFindOrder(order);
-        Orders newOrder = view.editExistingOrderInfo(order); 
-        //view.displayOrderSummary(newOrder);
-        dao.addOrder(newOrder.getOrderNumber(), newOrder);
-        view.displayEditOrderSuccessBanner();
+        boolean hasErrors = false;
+        do {
+            String existingOrderNumber = view.getEditOrderNumberChoice();
+            Orders order = service.getOrder(existingOrderNumber);
+            Orders newOrder = view.editExistingOrderInfo(order);
+        try {
+            service.editOrder(newOrder);
+            view.displayEditOrderSuccessBanner();
+                hasErrors = false;
+        } catch (FlooringMasteryDataValidationException e){
+                hasErrors = true;
+                view.displayErrorMessage(e.getMessage());
+        }   
+        
+        } while (hasErrors);
+        
     }
     // -- "END" EDIT ORDER  SECTION --
     
@@ -139,16 +166,24 @@ public class FlooringMasteryController {
     private void removeOrder() throws FlooringMasteryPersistenceException {
         view.displayRemoveOrderBanner();
         String existingOrderNumber = view.getOrderNumberChoice();
-        //String orderDate = view.getOrderDateChoice();        
-        dao.removeOrder(existingOrderNumber);
+        Orders order = service.getOrder(existingOrderNumber);
+        
+        view.displayOrderSummary(order);
+        if (order != null){
+        service.removeOrder(existingOrderNumber);
         view.displayRemoveOrderSuccessfulBanner();
+        } else {
+            // intentionally left blank
+        }
     }        
     // -- "END" REMOVE ORDER  SECTION --
     
     //---------------------------------------------------------| 
         
     // -- SAVE CURRENT WORK  SECTION --    
-    private void saveCurrentWork() throws FlooringMasteryPersistenceException {
+    private void saveCurrentWork() throws FlooringMasteryPersistenceException, 
+                                          FlooringMasteryDuplicateIdException,
+                                          FlooringMasteryDataValidationException {
         view.displaySaveCurrentWorkBanner();
         run();
         view.displaySaveCurrentWorkSuccessBanner();
@@ -160,7 +195,7 @@ public class FlooringMasteryController {
     // -- LIST ALL ORDERS  SECTION --    
     private void listAllOrders() throws FlooringMasteryPersistenceException {
         view.displayListAllOrdersBanner();
-        List<Orders> orderList = dao.getAllOrders();
+        List<Orders> orderList = service.getAllOrders();
         view.displayListAllOrders(orderList);       
     }           
     // -- "END" LIST ALL ORDERS  SECTION --
