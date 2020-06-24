@@ -33,17 +33,16 @@ public class FlooringMasteryServiceLayerImpl implements FlooringMasteryServiceLa
                                                  FloorMasteryValidateSubmitException,
                                                  FlooringMasteryDataValidationException,
                                                  FlooringMasteryDuplicateIdException {
-        if(dao.getOrder(order.getOrderNumber()) != null) {
-            throw new FlooringMasteryDuplicateIdException(
-                    "Error: Could not create order. Order "
-                            +order.getOrderNumber()
-                            +" already exists");
+        
+        if(dao.getOrder(order.getOrderNumber()) == null) {
+            String orderNumber = order.getOrderNumber();
+            order.setOrderNumber(dao.generateNextOrderNumber(orderNumber));            
         }
         validateRequiredFields(order);
         validateAreaSquareFeet(order);        
-        validateSumitOrder(order);        
+        validateSumitOrder(order);
         dao.addOrder(order.getOrderDate(), order);
-        auditDao.writeAuditEntry("New Order: "+order.getOrderNumber()+" CREATED.");
+        auditDao.writeAuditEntry("New Order: "+order.getOrderNumber()+" CREATED.");        
     }
 
     @Override
@@ -105,14 +104,23 @@ public class FlooringMasteryServiceLayerImpl implements FlooringMasteryServiceLa
             //order = null;
             throw new FloorMasteryValidateSubmitException (
                     "Order Removed Successfully!");         
-        } 
-        
+        }         
     }
+    
+    
+    public void systemGeneratedOrderNumber(Orders order) 
+            throws FlooringMasteryPersistenceException{
+        System.out.println();
+        String orderNumber = order.getOrderNumber();
+        if(dao.getOrder(order.getOrderNumber()) == null) {              
+           dao.generateNextOrderNumber(orderNumber);   
+           order.setOrderNumber(orderNumber);
+            System.out.println("Service Generated: "+orderNumber);
+        }   
+    }    
+            
+                  
         
         
-   
-    
-    
-    
     
 }

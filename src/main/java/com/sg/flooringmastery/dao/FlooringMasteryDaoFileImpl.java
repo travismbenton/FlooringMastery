@@ -33,6 +33,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     public static final String DELIMITER = "::"; 
     
     
+
     @Override
     public Orders addOrder(String orderNumber, Orders order) 
             throws FlooringMasteryPersistenceException, FlooringMasteryDuplicateIdException {
@@ -41,6 +42,21 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
         writeOrder();
         return newOrder;                
     }
+    
+    public String generateNextOrderNumber(String orderNumber) 
+            throws FlooringMasteryPersistenceException{
+        orderNumber = "0";
+        Integer newOrderNumber = 0;
+        //if(dao.getOrder(order.getOrderNumber()) == null) {              
+            newOrderNumber = Integer.valueOf(orderNumber);            
+            newOrderNumber = myOrders.size() + 1;            
+            orderNumber = String.valueOf(newOrderNumber);            
+            //order.setOrderNumber(orderNumber);
+        System.out.println("Next Avail OrderNumber: "+orderNumber);
+        loadOrder();
+        return orderNumber;
+        //String orderNumber = "";                  
+   }
     
     
     @Override
@@ -67,6 +83,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
         writeOrder();
         return removedOrder;        
     }
+    
    
     
     
@@ -122,9 +139,9 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
             System.out.println("-_- Could not load order data into memory");
             e.printStackTrace();
             throw new FlooringMasteryPersistenceException(
-                    "-_- Could not load order data into memory");
-            
+                    "-_- Could not load order data into memory");            
         }
+        
         // currentLine holds the most recent line read from the file
         String currentLine;        
         String[] currentTokens;

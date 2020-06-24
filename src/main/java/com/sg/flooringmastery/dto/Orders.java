@@ -36,7 +36,11 @@ public class Orders {
     
     public String getOrderNumber() {
         return orderNumber;
-    }   
+    } 
+    
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
+    }
 
     public String getOrderDate() {
         return orderDate;

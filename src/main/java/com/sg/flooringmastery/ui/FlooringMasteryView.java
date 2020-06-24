@@ -106,7 +106,7 @@ public class FlooringMasteryView {
     public Orders getNewOrderInfo(){
         
         //LocalDate orderDate;// = LocalDate.now().format(DateTimeFormatter.ofPattern("MMDDYYYY"));
-        String orderNumber = io.readString("Enter Order Number. ");
+        String orderNumber = io.readString("\"System Generated\". Please press enter. ");
         String orderDate = io.readString("Please enter Order Date. Formmat \"MMDDYYYY\" ");
         String customerName = io.readString("Enter Customer Name. ");
         String state = io.readString("Enter Customer State. ");
@@ -115,6 +115,7 @@ public class FlooringMasteryView {
         
         // -- Create a new "Order" object --
         Orders currentOrder = new Orders(orderNumber);// -- OrderNumber of the "New Order"
+        
         currentOrder.setOrderDate(orderDate);
         currentOrder.setCustomerName(customerName);
         currentOrder.setState(state);
