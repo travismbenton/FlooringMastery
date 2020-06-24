@@ -8,12 +8,14 @@ package com.sg.flooringmastery.dao;
 import com.sg.flooringmastery.dto.Orders;
 import com.sg.flooringmastery.service.FlooringMasteryDuplicateIdException;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,14 +30,14 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     
     private Map<String, Orders> myOrders = new HashMap<>();
     
-    public static final String ORDERS_FILE = "Orders_MMDDYYYY.txt";
     public static final String DELIMITER = "::"; 
     
     
     @Override
     public Orders addOrder(String orderNumber, Orders order) 
             throws FlooringMasteryPersistenceException, FlooringMasteryDuplicateIdException {
-        Orders newOrder = myOrders.put(orderNumber, order);
+        Orders newOrder = myOrders.put(orderNumber, order);        
+        loadOrder();        
         writeOrder();
         return newOrder;                
     }
@@ -58,18 +60,35 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     
 
     @Override
-    public Orders removeOrder(String orderNumber) 
+    public Orders removeOrder(String orderDate, String orderNumber) 
             throws FlooringMasteryPersistenceException {
         Orders removedOrder = myOrders.remove(orderNumber);
+        loadOrder();
         writeOrder();
         return removedOrder;        
     }
+   
     
     
     
+    /*public void createNewFile() {    
     
-    
-    
+// -- CREATE THE FILE --
+    try {    
+        
+      File ORDERS_FILE = new File("Order_"+LocalDate.now().format(DateTimeFormatter.ofPattern("MMddyyyy"))+".txt");
+      ORDERS_FILE.createNewFile();
+      if (ORDERS_FILE.createNewFile()) {
+        System.out.println("CREATE-FILE MESSAGE:  File created: " + ORDERS_FILE.getName());
+      } else {
+        System.out.println("CREATE-FILE MESSAGE:  File already exists. ");
+      }
+    } catch (IOException e) {
+      System.out.println("An error occurred.");
+      e.printStackTrace();
+    }
+    }*/
+      
     
     
     
@@ -77,14 +96,34 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
     private void loadOrder() throws FlooringMasteryPersistenceException {
         Scanner scanner;
         
+        try {    
+            File ORDERS_FILE = new File("Order_"+LocalDate.now().format(DateTimeFormatter.ofPattern("MMddyyyy"))+".txt");
+            ORDERS_FILE.createNewFile(); // -- Create New File DAILY --
+            if (ORDERS_FILE.createNewFile()) {
+            System.out.println("CREATE-FILE MESSAGE:  File created: " + ORDERS_FILE.getName());
+        } else {
+            System.out.println("CREATE-FILE MESSAGE:  File already exists. ");
+        }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        
+        
+        
         try {   
-            // Create Scanner for reading the file
+            // Create Scanner for "READING" the file            
+            File ORDERS_FILE = new File("Order_"+LocalDate.now().format(DateTimeFormatter.ofPattern("MMddyyyy"))+".txt");
+            //scanner = new Scanner(ORDERS_FILE);
             scanner = new Scanner(
                     new BufferedReader(
                         new FileReader(ORDERS_FILE)));
         } catch (FileNotFoundException e){
+            System.out.println("-_- Could not load order data into memory");
+            e.printStackTrace();
             throw new FlooringMasteryPersistenceException(
-                    "-_- Could not load order data into memory", e);
+                    "-_- Could not load order data into memory");
+            
         }
         // currentLine holds the most recent line read from the file
         String currentLine;        
@@ -93,27 +132,32 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
         
         while(scanner.hasNextLine()){
             currentLine = scanner.nextLine();
-            currentTokens = currentLine.split(DELIMITER);
+            currentTokens = currentLine.split(DELIMITER);            
             
             Orders currentOrder = new Orders(currentTokens[0]);            
             
-            currentOrder.setCustomerName(currentTokens[1]);
-	    currentOrder.setState(currentTokens[2]);
-	    currentOrder.setTaxRate(currentTokens[3]);
-            currentOrder.setProductType(currentTokens[4]);
-	    currentOrder.setArea(currentTokens[5]);
-	    currentOrder.setCostPerSquareFoot(currentTokens[6]);
-            currentOrder.setLaborCostPerSquareFoot(currentTokens[7]);
-	    currentOrder.setMaterialCost(currentTokens[8]);
-	    currentOrder.setLaborCost(currentTokens[9]);
-            currentOrder.setTax(currentTokens[10]);
-	    currentOrder.setTotal(currentTokens[11]);	    
+            currentOrder.setOrderDate(currentTokens[1]);
+            currentOrder.setCustomerName(currentTokens[2]);
+	    currentOrder.setState(currentTokens[3]);
+	    currentOrder.setTaxRate(currentTokens[4]);
+            currentOrder.setProductType(currentTokens[5]);
+	    currentOrder.setArea(currentTokens[6]);
+	    currentOrder.setCostPerSquareFoot(currentTokens[7]);
+            currentOrder.setLaborCostPerSquareFoot(currentTokens[8]);
+	    currentOrder.setMaterialCost(currentTokens[9]);
+	    currentOrder.setLaborCost(currentTokens[10]);
+            currentOrder.setTax(currentTokens[11]);
+	    currentOrder.setTotal(currentTokens[12]);	    
             
-            myOrders.put(currentOrder.getOrderNumber(), currentOrder);           
+            myOrders.put(currentOrder.getOrderNumber(), currentOrder);            
+            
         }
         scanner.close(); 
+       
         
     } // -- loadRoster() --
+    
+    
 
 
     // -- WRITE - ROSTER --
@@ -122,18 +166,18 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
 	    PrintWriter out;
 	    
 	    try {                
-	        out = new PrintWriter(new FileWriter(ORDERS_FILE));
+	        out = new PrintWriter(new FileWriter("Order_"+LocalDate.now().format(DateTimeFormatter.ofPattern("MMddyyyy"))+".txt"));
 	    } catch (IOException e) {
 	        throw new FlooringMasteryPersistenceException(
 	                "Could not save order data.", e);
 	    }	    
 	    
             
-            
 	    List<Orders> orderList = this.getAllOrders();
 	    for (Orders currentOrder : orderList) {
-	        // write the Student object to the file
-	        out.println(currentOrder.getOrderNumber()+ DELIMITER	                
+	        // write the Orders object to the file
+	        out.println(currentOrder.getOrderNumber()+ DELIMITER
+                        + currentOrder.getOrderDate()+ DELIMITER
 	                + currentOrder.getCustomerName()+ DELIMITER
 	                + currentOrder.getState()+ DELIMITER
                         + currentOrder.getTaxRate()+ DELIMITER 
@@ -153,6 +197,7 @@ public class FlooringMasteryDaoFileImpl implements FlooringMasteryDao {
 	    }
 	    // Clean up
 	    out.close();
+            System.out.println("WRITE-FILE MESSAGE:  Successfully wrote to the file.");
             
     } // -- writeRoster() --    
     

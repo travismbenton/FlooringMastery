@@ -48,7 +48,7 @@ public class FlooringMasteryController {
                     displayOrders();
                     break;
                 case 2:
-                    addOrder();
+                    createOrder();
                     break;
                 case 3:
                     editOrder();
@@ -116,7 +116,7 @@ public class FlooringMasteryController {
     //---------------------------------------------------------|      
         
     // -- ADD ORDER  SECTION --    
-    private void addOrder() throws FlooringMasteryPersistenceException, 
+    private void createOrder() throws FlooringMasteryPersistenceException, 
                                    FlooringMasteryDuplicateIdException, 
                                    FloorMasteryValidateSubmitException,
                                    FlooringMasteryDataValidationException {
@@ -131,10 +131,11 @@ public class FlooringMasteryController {
                 view.displayCreateOrderSuccessBanner();  
                 hasErrors = false;
             } catch (FlooringMasteryDataValidationException | 
-                     FlooringMasteryDuplicateIdException e) {                      
+                     FlooringMasteryDuplicateIdException | 
+                     FlooringMasteryPersistenceException e) {                      
                 hasErrors = true;
                 view.displayErrorMessage(e.getMessage());
-            } catch (FloorMasteryValidateSubmitException e){
+            } catch (FloorMasteryValidateSubmitException e) {
                 hasErrors = true;
                 run();
             }
@@ -153,21 +154,26 @@ public class FlooringMasteryController {
         view.displayEditOrderBanner();
         boolean hasErrors = false;
         do {
-            String existingOrderNumber = view.getEditOrderNumberChoice();
-            Orders order = service.getOrder(existingOrderNumber);
-            Orders newOrder = view.editExistingOrderInfo(order);
-            view.displayVerifyOrderSummary(newOrder);
+                //String existingOrderDate = view.getOrderDateChoice();
+                String existingOrderNumber = view.getEditOrderNumberChoice();
+                Orders order = service.getOrder(existingOrderNumber);
+                Orders newOrder = view.editExistingOrderInfo(order);            
         try {
-            service.editOrder(newOrder);
-            view.displayEditOrderSuccessBanner();
+                view.displayVerifyOrderSummary(newOrder);
+                service.editOrder(newOrder);
+                view.displayEditOrderSuccessBanner();
                 hasErrors = false;
         } catch (FlooringMasteryDataValidationException | 
-                 FlooringMasteryDuplicateIdException e){
+                 FlooringMasteryDuplicateIdException e) {
                 hasErrors = true;
                 view.displayErrorMessage(e.getMessage());
-        }   
+        } catch (FloorMasteryValidateSubmitException e) {
+                hasErrors = true;
+                run(); 
+        }        
         
         } while (hasErrors);
+        
         
     }
     // -- "END" EDIT ORDER  SECTION --
@@ -177,12 +183,13 @@ public class FlooringMasteryController {
     // -- REMOVE ORDER  SECTION --    
     private void removeOrder() throws FlooringMasteryPersistenceException {
         view.displayRemoveOrderBanner();
-        String existingOrderNumber = view.getOrderNumberChoice();
-        Orders order = service.getOrder(existingOrderNumber);
+        String removeOrderDate = view.getOrderDateChoice();
+        String removeOrderNumber = view.getOrderNumberChoice();
+        Orders order = service.getOrder(removeOrderNumber);
         
         view.displayOrderSummary(order);
         if (order != null){
-        service.removeOrder(existingOrderNumber);
+        service.removeOrder(removeOrderDate, removeOrderNumber);
         view.displayRemoveOrderSuccessfulBanner();
         } else {
             // intentionally left blank

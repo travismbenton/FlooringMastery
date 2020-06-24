@@ -33,6 +33,6 @@ public interface FlooringMasteryServiceLayer {
     public Orders getOrder(String orderNumber) throws
             FlooringMasteryPersistenceException;
  
-    public Orders removeOrder(String orderNumber) throws
+    public Orders removeOrder(String orderDate, String orderNumber) throws
             FlooringMasteryPersistenceException;
 }

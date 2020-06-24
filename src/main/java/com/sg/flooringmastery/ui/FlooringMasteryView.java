@@ -13,6 +13,8 @@ import java.io.File;
 import static java.lang.System.out;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 import org.eclipse.core.internal.runtime.Product;
@@ -78,9 +80,10 @@ public class FlooringMasteryView {
     // -- DISPLAY ORDERS  SECTION --         
     public void displayOrdersListBanner() {
 	io.print("=== Customer's Orders ===");
+        
     }   
     public String getOrderDateChoice(){
-        return io.readString("Please enter Order Date.");
+        return io.readString("Please enter Order Date. Formmat \"MMDDYYYY\" ");
     }
     public void displayOrderList(List<Orders> orderList){        
         for (Orders existingOrders : orderList){
@@ -102,7 +105,9 @@ public class FlooringMasteryView {
     }
     public Orders getNewOrderInfo(){
         
+        //LocalDate orderDate;// = LocalDate.now().format(DateTimeFormatter.ofPattern("MMDDYYYY"));
         String orderNumber = io.readString("Enter Order Number. ");
+        String orderDate = io.readString("Please enter Order Date. Formmat \"MMDDYYYY\" ");
         String customerName = io.readString("Enter Customer Name. ");
         String state = io.readString("Enter Customer State. ");
         String productType = io.readString("Enter Product Type. ");
@@ -110,6 +115,7 @@ public class FlooringMasteryView {
         
         // -- Create a new "Order" object --
         Orders currentOrder = new Orders(orderNumber);// -- OrderNumber of the "New Order"
+        currentOrder.setOrderDate(orderDate);
         currentOrder.setCustomerName(customerName);
         currentOrder.setState(state);
         // -- TAXE RATES --
@@ -344,7 +350,8 @@ public class FlooringMasteryView {
     }
     public Orders editExistingOrderInfo(Orders order){
         
-        String orderNumber = io.readString("Order Number: "+order.getOrderNumber());  
+        String orderNumber = io.readString(order.getOrderNumber());  
+        String orderDate = io.readString(order.getOrderDate());
         String customerName = io.readString("Enter Customer Name. "+order.getCustomerName());   
         String state = io.readString("Enter State. "+order.getState());        
         String productType = io.readString("Enter Product Type. "+order.getProductType());
@@ -537,9 +544,10 @@ public class FlooringMasteryView {
     }
     public void displayListAllOrders(List<Orders> orderList){        
         for (Orders existingOrders : orderList){
-            io.print("  ===  Order Summary  ===  ");
             io.print("");
+	    io.print("  ===  Order Summary  ===  ");
             io.print("Order Number: "+existingOrders.getOrderNumber());
+            io.print("Order Date: "+existingOrders.getOrderDate());
 	    io.print("Customer Name: "+existingOrders.getCustomerName());
 	    io.print("Customer State: "+existingOrders.getState());
             io.print("Tax Rate: $"+existingOrders.getTaxRate());
@@ -551,8 +559,8 @@ public class FlooringMasteryView {
             io.print("Labor Cost: $"+existingOrders.getLaborCost());
             io.print("Tax: $"+existingOrders.getTax());
             io.print("Total: $"+existingOrders.getTotal());
-            io.print("");
-            io.print("  -- End Of Order --  ");            
+            io.print("  ===  END:  Order Summary  ===  ");
+            io.print("");           
         }      
     }
          

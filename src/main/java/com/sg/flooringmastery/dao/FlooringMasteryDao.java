@@ -24,7 +24,7 @@ public interface FlooringMasteryDao {
     Orders getOrder(String orderNumber)
             throws FlooringMasteryPersistenceException;       
     
-    Orders removeOrder(String orderNumber)
+    Orders removeOrder(String orderDate, String orderNumber)
             throws FlooringMasteryPersistenceException;
     
     

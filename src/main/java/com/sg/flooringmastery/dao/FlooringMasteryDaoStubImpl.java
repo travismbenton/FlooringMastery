@@ -15,7 +15,7 @@ import java.util.List;
 public class FlooringMasteryDaoStubImpl implements FlooringMasteryDao {
 
     @Override
-    public Orders addOrder(String orderNumber, Orders order) throws FlooringMasteryPersistenceException {
+    public Orders addOrder(String orderDate, Orders order) throws FlooringMasteryPersistenceException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -30,7 +30,7 @@ public class FlooringMasteryDaoStubImpl implements FlooringMasteryDao {
     }
 
     @Override
-    public Orders removeOrder(String orderNumber) throws FlooringMasteryPersistenceException {
+    public Orders removeOrder(String orderDate, String orderNumber) throws FlooringMasteryPersistenceException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

@@ -42,7 +42,7 @@ public class FlooringMasteryServiceLayerImpl implements FlooringMasteryServiceLa
         validateRequiredFields(order);
         validateAreaSquareFeet(order);        
         validateSumitOrder(order);        
-        dao.addOrder(order.getOrderNumber(), order);
+        dao.addOrder(order.getOrderDate(), order);
         auditDao.writeAuditEntry("New Order: "+order.getOrderNumber()+" CREATED.");
     }
 
@@ -52,7 +52,8 @@ public class FlooringMasteryServiceLayerImpl implements FlooringMasteryServiceLa
                                                FlooringMasteryDataValidationException,
                                                FlooringMasteryDuplicateIdException {
         validateRequiredFields(order);
-        validateAreaSquareFeet(order);        
+        validateAreaSquareFeet(order);
+        validateSumitOrder(order);
         dao.addOrder(order.getOrderNumber(), order);
         auditDao.writeAuditEntry("Existing Order: "+order.getOrderNumber()+" EDITED.");
     }
@@ -68,8 +69,8 @@ public class FlooringMasteryServiceLayerImpl implements FlooringMasteryServiceLa
     }
 
     @Override
-    public Orders removeOrder(String orderNumber) throws FlooringMasteryPersistenceException {
-        Orders removedOrder = dao.removeOrder(orderNumber);
+    public Orders removeOrder(String orderDate, String orderNumber) throws FlooringMasteryPersistenceException {
+        Orders removedOrder = dao.removeOrder(orderDate, orderNumber);
         auditDao.writeAuditEntry("Existing Order: "+orderNumber+" REMOVED.");
         return removedOrder;
     }

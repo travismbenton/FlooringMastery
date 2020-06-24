@@ -5,6 +5,7 @@
  */
 package com.sg.flooringmastery.dto;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -14,6 +15,7 @@ import java.util.Objects;
 public class Orders {
     
     private String orderNumber;
+    private String orderDate;
     private String customerName;
     private String state;
     private String taxRate;
@@ -29,13 +31,21 @@ public class Orders {
     
     
     public Orders(String orderNumber) {
-        this.orderNumber = orderNumber;
+        this.orderNumber = orderNumber;        
     }
-
+    
     public String getOrderNumber() {
         return orderNumber;
-    }    
+    }   
 
+    public String getOrderDate() {
+        return orderDate;
+    }
+    
+    public void setOrderDate(String orderDate) {
+        this.orderDate = orderDate;
+    }
+    
     public String getCustomerName() {
         return customerName;
     }
