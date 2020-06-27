@@ -33,5 +33,10 @@ public class FlooringMasteryDaoStubImpl implements FlooringMasteryDao {
     public Orders removeOrder(String orderDate, String orderNumber) throws FlooringMasteryPersistenceException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public String generateNextOrderNumber(String orderNumber) throws FlooringMasteryPersistenceException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
